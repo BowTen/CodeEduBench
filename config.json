@@ -1,0 +1,90 @@
+{
+    "database": {
+        "user": "root",
+        "password": "root",
+        "host": "localhost",
+        "port": 3308,
+        "name": "jol"
+    },
+
+	"database_aitest": {
+        "user": "root",
+        "password": "root",
+        "host": "localhost",
+        "port": 3308,
+        "name": "aitest"
+    },
+
+	"problem_interval": {
+		"easy": 65,
+		"medium": 90,
+		"hard": 100
+	},
+
+	"problem_num": {
+		"easy": 10,
+		"medium": 10,
+		"hard": 10
+	},
+
+	"code_num": {
+		"easy": 10,
+		"medium":10,
+		"hard": 10
+	},
+
+	"models": [
+		{
+			"name": "Qwen2.5-7B-Instruct",
+			"api_key": "None",
+			"base_url": "http://localhost:8000/v1",
+			"api": "vllm",
+			"base_path": "/root/models"
+		},
+		{
+			"name": "moonshot-v1-8k",
+			"api_key": "sk-p2jw2UiU3Feg1tqAI5utnkcpR7KyOuUAKjd35crNafvIv07c",
+			"base_url": "https://api.moonshot.cn/v1",
+			"api": "openai"
+		},
+		{
+			"name": "Qwen2.5-Coder-7B-Instruct",
+			"api_key": "None",
+			"base_url": "http://localhost:8000/v1",
+			"api": "vllm",
+			"base_path": "/root/models"
+		},
+		{
+			"name": "llama3.1:8b",
+			"api_key": "None",
+			"base_url": "http://localhost:11434/api",
+			"api": "ollama"
+		},
+		{
+			"name": "codellama:13b",
+			"api_key": "None",
+			"base_url": "http://localhost:11434/api",
+			"api": "ollama"
+		}
+	],
+
+	"model_path": "/root/models",
+
+	"evaluate_model": {
+		"name": "moonshot-v1-8k",
+		"api_key": "sk-p2jw2UiU3Feg1tqAI5utnkcpR7KyOuUAKjd35crNafvIv07c",
+		"base_url": "https://api.moonshot.cn/v1"
+	},
+
+	"prompt_type": {
+		"annotation_gen": 1,
+		"knowledge_exp": 2,
+		"test_case_gen": 3,
+		"code_gen": 4,
+		"code_cor": 5
+	},
+
+	"judge_api": {
+		"base_url": "http://172.22.233.71:8998/judge"
+	}
+}
