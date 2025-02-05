@@ -3,7 +3,7 @@
         "user": "root",
         "password": "root",
         "host": "localhost",
-        "port": 3306,
+        "port": 3308,
         "name": "jol"
     },
 
@@ -11,7 +11,7 @@
         "user": "root",
         "password": "root",
         "host": "localhost",
-        "port": 3306,
+        "port": 3308,
         "name": "aitest"
     },
 
@@ -39,11 +39,11 @@
 			"api_key": "None",
 			"base_url": "http://localhost:8000/v1",
 			"api": "vllm",
-			"base_path": "/path/to/models"
+			"base_path": "/root/models"
 		},
 		{
 			"name": "moonshot-v1-8k",
-			"api_key": "api_key",
+			"api_key": "sk-p2jw2UiU3Feg1tqAI5utnkcpR7KyOuUAKjd35crNafvIv07c",
 			"base_url": "https://api.moonshot.cn/v1",
 			"api": "openai"
 		},
@@ -52,7 +52,7 @@
 			"api_key": "None",
 			"base_url": "http://localhost:8000/v1",
 			"api": "vllm",
-			"base_path": "/path/to/models"
+			"base_path": "/root/models"
 		},
 		{
 			"name": "llama3.1:8b",
@@ -68,11 +68,11 @@
 		}
 	],
 
-	"model_path": "/path/to/models",
+	"model_path": "/root/models",
 
 	"evaluate_model": {
 		"name": "moonshot-v1-8k",
-		"api_key": "api_key",
+		"api_key": "sk-p2jw2UiU3Feg1tqAI5utnkcpR7KyOuUAKjd35crNafvIv07c",
 		"base_url": "https://api.moonshot.cn/v1"
 	},
 
@@ -85,6 +85,6 @@
 	},
 
 	"judge_api": {
-		"base_url": "http://localhost/judge"
+		"base_url": "http://172.22.233.71:8998/judge"
 	}
 }
