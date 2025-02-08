@@ -7,6 +7,13 @@ from database_connect import get_session
 import time
 import requests
 
+def get_json(s):
+	while len(s) > 0 and s[0] != '{':
+		s = s[1:]
+	while len(s) > 0 and s[-1] != '}':
+		s = s[:-1]
+	return s
+
 # 读取配置文件
 with open('config.json', 'r') as config_file:
 	config = json.load(config_file)
@@ -61,17 +68,19 @@ def run_evaluate_by_prompt(prompt):
 		print(f"Prompt {prompt.prompt_id} complement failed.")
 		return 0
 
-
-
-
-
+	
 	content = response.choices[0].message.content
 	evaluate_gen = aitestOrm.EvaluateGen(content=content)
 	session.add(evaluate_gen)
 	session.flush()
 	prompt.eval_id = evaluate_gen.eval_id
 
-	content = json.loads(response.choices[0].message.content)
+	try:
+		content = json.loads(get_json(response.choices[0].message.content))
+	except Exception as e:
+		print(f"Error: {e}")
+		print(f"response: {response.choices[0].message.content}")
+
 
 	prompt_type = '[type]'
 	if prompt.type == 1:

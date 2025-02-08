@@ -142,6 +142,11 @@ def run_prompt_by_api(prompt: aitestOrm.PromptComp):
 			wait_time += 10
 			print(f"请求超时，第{retry_count}次重试...")
 			time.sleep(2)  # 等待2秒再重试
+		except requests.exceptions.ReadTimeout:
+			retry_count += 1
+			wait_time += 10
+			print(f"请求超时，第{retry_count}次重试...")
+			time.sleep(2)  # 等待2秒再重试
 		except Exception as e:
 			print(f"发生错误: {e}")
 			exit(0)  # 发生其他错误时停止重试

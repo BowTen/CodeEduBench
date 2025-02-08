@@ -61,6 +61,14 @@ def call_ollama(prompt: dict, wait_time=10):
 			return None
 	except requests.exceptions.RequestException as e:
 		raise e
+	except requests.exceptions.Timeout as e:
+		print("Timeout")
+		raise e
+	except requests.exceptions.ReadTimeout as e:
+		print("ReadTimeout")
+		raise e
+	except Exception as e:
+		raise e
 
 def call_dashscope(prompt: dict, wait_time=10):
 	model = prompt['model'] 
@@ -185,4 +193,4 @@ if __name__ == '__main__':
 
 	#print(call(prompt))
 
-	test_ollama("codellama:13b")
+	test_ollama("deepseek-r1:7b")

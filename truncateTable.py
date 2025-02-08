@@ -25,7 +25,7 @@ def truncate_test_data():
 	truncate_table(aitestOrm.Code)
 	truncate_table(aitestOrm.ProblemForCode)
 	truncate_table(aitestOrm.Problem)
-	#truncate_table(aitestOrm.KnowledgePoint)
+	truncate_table(aitestOrm.KnowledgePoint)
 	truncate_table(aitestOrm.ModelScore)
 
 def truncate_all():

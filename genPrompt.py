@@ -39,10 +39,20 @@ def splicing_annotation_gen_prompt(model, problem_description, code):
     prompt = {
         "model": model,
         "messages": [
-            {"role": "system", "content": f"你是{model}，你是帮助C语言初学者编程的人工智能助手。"},
-            {"role": "user", "content": f"请为以下编程题目的一份正确代码生成代码注释。以下是编程题目：\n{problem_description}\n以下是代码：\n{code}"}
+            {"role": "system", "content": f"""你是一个帮助C语言初学者编程的人工智能助手。接下来你会被提供以下内容：
+	(1)problem:C语言编程题目描述;
+	(2)code:题目对应的C代码。
+	你的任务是为编程题目的一份代码生成代码
+	注释。"""},
+            {"role": "user", "content": f"""
+	这是我提供的内容：
+	problem:
+	{problem_description}
+	code:
+	{code}"""}
         ],
-		"response_format": {"type": "text"}
+		"response_format": {"type": "text"},
+		"temperature": 0.75
     }
     return json.dumps(prompt, ensure_ascii=False)
 
@@ -50,10 +60,16 @@ def splicing_knlg_exp_prompt(model, knowledge):
 	prompt = {
 		"model": model,
 		"messages": [
-			{"role": "system", "content": f"你是{model}，你是帮助C语言初学者编程的人工智能助手。"},
-			{"role": "user", "content": f"请你针对 “{knowledge}” 这个 C 语言语法点生成案例解释。"}
+			{"role": "system", "content": f"""你是一个帮助C语言初学者编程的人工智能
+	助手。接下来你会被提供以下内容：
+	(1)knowledge:C语言语法点。
+	你的任务是为该语法点生成案例解释。"""},
+			{"role": "user", "content": f"""这是我提供的内容：
+	knowledge:
+	{knowledge}"""}
 		],
-		"response_format": {"type": "text"}
+		"response_format": {"type": "text"},
+		"temperature": 0.75
 	}
 	return json.dumps(prompt, ensure_ascii=False)
 
@@ -75,11 +91,16 @@ def splicing_case_gen_prompt(model, problem_description):
 	prompt = {
 		"model": model,
 		"messages": [
-			{"role": "system", "content": f"你是{model}，你是帮助C语言初学者编程的人工智能助手。接下来我会给你一道编程题，请你生成一些测试样例。请注意生成的每个测试样例字符不要太多。\n请严格按照给定的json格式输出内容。输出示例：\n{json.dumps(json_schema, ensure_ascii=False)}"},
-			{"role": "user", "content": f"请根据以下编程题目生成测试样例。以下是编程题目：\n{problem_description}"}
+			{"role": "system", "content": f"""你是一个帮助C语言初学者编程的人工智能助手。接下来你会被提供以下内容：
+	(1)problem:C语言编程题目描述。
+	你的任务是为该题目生成一些测试样例。请严格按照下面给定的json格式输出：
+	{json.dumps(json_schema, ensure_ascii=False)}
+	"""},
+			{"role": "user", "content": f"""这是我提供的内容：problem:
+	{problem_description}"""}
 		],
 		"response_format": {"type": "json_object"},
-		"temperature": 0.0
+		"temperature": 0.75
 	}
 	return json.dumps(prompt, ensure_ascii=False)
 
@@ -92,11 +113,19 @@ def splicing_code_gen_prompt(model, problem_description):
 	prompt = {
 		"model": model,
 		"messages": [
-			{"role": "system", "content": f"你是{model}，你是帮助C语言初学者编程的人工智能助手。接下来我会给你一道编程题，请你生成一份完整的正确代码。\n请严格按照给定的json格式输出内容。输出示例：\n{json.dumps(json_schema, ensure_ascii=False)}"},
-			{"role": "user", "content": f"请根据以下编程题目用C语言生成正确代码。以下是编程题目：\n{problem_description}"}
+			{"role": "system", "content": f"""你是一个帮助C语言初学者编程的人工智能
+	助手。接下来你会被提供以下内容：
+	(1)problem:C语言编程题目描述。
+	你的任务是为该题目生成一份完整的正确代
+	码。
+	请严格按照下面给定的json格式输出：
+	{json.dumps(json_schema, ensure_ascii=False)}"""},
+			{"role": "user", "content": f"""这是我提供的内容：
+	problem:
+	{problem_description}"""}
 		],
 		"response_format": {"type": "json_object"},
-		"temperature": 0.0
+		"temperature": 0.75
 	}
 	return json.dumps(prompt, ensure_ascii=False)
 
@@ -109,11 +138,17 @@ def splicing_code_cor_prompt(model, problem_description, code):
 	prompt = {
 		"model": model,
 		"messages": [
-			{"role": "system", "content": f"你是{model}，你是帮助C语言初学者编程的人工智能助手。接下来我会给你一道编程题，以及一份未通过的代码，请你修改该代码以通过题目。\n请严格按照给定的json格式输出内容。输出示例：\n{json.dumps(json_schema, ensure_ascii=False)}"},
-			{"role": "user", "content": f"请根据编程题目对错误的代码进行纠错。以下是编程题目：\n{problem_description} \n以下是错误代码：\n{code}"}
+			{"role": "system", "content": f"""你是一个帮助C语言初学者编程的人工智能助手。接下来你会被提供以下内容：(1)problem:C语言编程题目描述;
+	(2)code:题目对应一份错误的C代码。你的任务是修改这份错误的代码使得其正确。
+	请严格按照下面给定的json格式输出：
+	{json.dumps(json_schema, ensure_ascii=False)}"""},
+			{"role": "user", "content": f"""这是我提供的内容：problem:
+	{problem_description}
+	code:
+	{code}"""}
 		],
 		"response_format": {"type": "json_object"},
-		"temperature": 0.0
+		"temperature": 0.75
 	}
 	return json.dumps(prompt, ensure_ascii=False)
 
@@ -121,7 +156,7 @@ def splicing_code_cor_prompt(model, problem_description, code):
 # 生成prompt
 def generate_annotation_gen_prompt():
 	models = session.query(aitestOrm.ModelScore).all()
-	codes = session.query(aitestOrm.Code).filter(aitestOrm.Code.accepted == 1).all()
+	codes = session.query(aitestOrm.Code).filter(aitestOrm.Code.accepted <= 1).all()
 	cnt = 0
 	for model in models:
 		for code in codes:
@@ -250,7 +285,7 @@ def generate_code_gen_prompt():
 
 def generate_code_cor_prompt():
 	models = session.query(aitestOrm.ModelScore).all()
-	codes = session.query(aitestOrm.Code).filter(aitestOrm.Code.accepted == 0).all()
+	codes = session.query(aitestOrm.Code).filter(aitestOrm.Code.accepted == 2).all()
 	cnt = 0
 	for model in models:
 		for code in codes:

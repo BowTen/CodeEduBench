@@ -132,8 +132,12 @@ def judge_code_cor():
 			# 获取新代码的通过率
 			pass_rate = judge_code(code_cor.code.problem_for_code.problem_id, code)
 			
+			#print("old_pass_rate: ", old_pass_rate, "pass_rate: ", pass_rate)
 			# 计算correctness
-			correctness = ((pass_rate - old_pass_rate) / (1.0 - old_pass_rate)) * 5
+			if old_pass_rate == 1.0:
+				correctness = 0.0
+			else:
+				correctness = ((pass_rate - old_pass_rate) / (1.0 - old_pass_rate)) * 5
 			if correctness < 0:
 				correctness = 0.0
 			code_cor.correctness = correctness

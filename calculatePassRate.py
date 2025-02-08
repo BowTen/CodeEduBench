@@ -1,5 +1,5 @@
 from database_connect import get_session
-from jolOrm import Problem
+from jolOrm import Problem, Solution
 import math
 from tabulate import tabulate
 
@@ -12,6 +12,9 @@ accode_cnt = [0] * 101
 wacode_cnt = [0] * 101
 
 for problem in problems:
+    ac = session.query(Solution).filter(Solution.problem_id == problem.problem_id, Solution.result == 4, Solution.language == 0).count()
+    if ac == 0:
+        continue
     pass_rate = 0
     if problem.accepted > 0:
         pass_rate = problem.accepted / problem.submit
@@ -20,7 +23,6 @@ for problem in problems:
     code_cnt[pass_rate] += problem.submit
     accode_cnt[pass_rate] += problem.accepted
     wacode_cnt[pass_rate] += problem.submit - problem.accepted
-
 
 
 def print_data(rng, only_sum=False):

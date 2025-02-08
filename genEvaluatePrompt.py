@@ -32,9 +32,19 @@ def splicing_anno_gen_eval_prompt(problem_description, code):
 	prompt = {
 		"model": eval_model,
 		"messages": [
-			{"role": "system", "content": f"请按以下json格式输出\n{json.dumps(json_schema, ensure_ascii=False)}"},
+			{"role": "system", "content": f"""你是一个代码注释审核以及C语言编程方面的专家。接下来你会被提供以下内容：
+	(1)problem:C语言编程题目描述;
+	(2)code:题目对应的带有注释的C代码；
+	(3)standards:评估标准，包含代码注释质量的评估维度及其评估指标。你的任务是参考题目，根据评估标准对代码注释质量进行评估。
+	请严格按照下面给定的json格式输出：
+	{json.dumps(json_schema, ensure_ascii=False)}"""},
 			{"role": "user", "content": f"""
-	请对我提供的代码注释按照以下标准对每个维度进行打分：
+	这是我提供的内容：
+	problem:
+	{problem_description}
+	code:
+	{code}
+	standards:
 	一、准确性(accuracy)：
 	1 分：注释与代码的关键操作、核心功能和重要变量毫无关联，对理解代码毫无帮助，甚至严重误导对代码功能的判断。
 	2 分：仅部分提及代码相关内容，但包含大量错误和偏差，只能大致反映代码意图，核心信息不准确。
@@ -59,12 +69,7 @@ def splicing_anno_gen_eval_prompt(problem_description, code):
 	3 分：提供一定量信息，能辅助理解部分代码逻辑，但解释不全面，对工作原理和用途解释不足。例如对函数的注释仅提及部分功能，未解释关键步骤和参数作用。
 	4 分：包含较多有助于理解的信息，能解释主要功能、基本逻辑和关键细节，但未涉及适用场景、潜在风险等。
 	5 分：提供丰富且有深度的信息，涵盖功能、逻辑、实现思路，还提供背景知识、使用场景、优化方向和注意事项等，全面支持理解和使用代码。
-	以下是编程题目：
-	{problem_description}
-	以下是带有注释的代码：
-	{code}
-	在对上述代码注释进行评估时，请务必保持打分标准的一致性。
-	 """}
+	"""}
 		],
 		"response_format": {"type": "json_object"}
 	}
@@ -79,9 +84,19 @@ def splicing_knlg_exp_eval_prompt(knowledge_point_content, knowledge_point_exp):
 	prompt = {
 		"model": eval_model,
 		"messages": [
-			{"role": "system", "content": f"请按以下json格式输出\n{json.dumps(json_schema, ensure_ascii=False)}"},
+			{"role": "system", "content": f"""你是一个代码审核以及C语言编程方面的专家。接下来你会被提供以下内容：
+	(1)knowledge:C语言语法点；
+	(2)explanations:该语法点对应的案例解释；
+	(3)standards:评估标准，包含语法点案例解释质量的评估维度及其评估指标。你的任务是参考语法点，根据评估标准对案例解释质量进行评估。
+	请严格按照下面给定的json格式输出：
+	{json.dumps(json_schema, ensure_ascii=False)}"""},
 			{"role": "user", "content": f"""
-	请你对我提供的“{knowledge_point_content}”这个C语言语法点生成的案例解释按照以下标准对每个维度进行打分：
+	这是我提供的内容：
+	knowledge:
+	{knowledge_point_content}
+	explanations:
+	{knowledge_point_exp}
+	standards:
 	一、准确性(accuracy)：
 	1 分：案例完全不符合语法点的官方定义和标准用法，代码示例存在严重错误，解释内容具有极大的误导性，基本无参考价值，严重干扰学生学习。
 	2 分：案例存在较多错误，对语法点解释偏差明显，部分内容误导学生，学生难把握正确含义与用法，需大改。
@@ -100,10 +115,7 @@ def splicing_knlg_exp_eval_prompt(knowledge_point_content, knowledge_point_exp):
 	3 分：语言基本能懂，有一定专业术语，结构有一定条理，但逻辑衔接不紧密，学生需花时间精力梳理。
 	4 分：语言较通俗易懂，专业术语少不影响理解，结构清晰，逻辑连贯，学生简单阅读就能理解关系，少量提示可掌握。
 	5 分：语言极其通俗易懂，无专业术语或解释清晰，结构非常清晰，按先规则、再案例、后说明的方式，学生轻松理解，无需额外指导。
-	以下是案例解释：
-	{knowledge_point_exp}
-	在对上述案例解释进行评估时，请务必保持打分标准的一致性。
-	 """}
+	"""}
 		],
 		"response_format": {"type": "json_object"}
 	}
@@ -116,19 +128,26 @@ def splicing_case_gen_eval_prompt(problem_description, case_json):
 	prompt = {
 		"model": eval_model,
 		"messages": [
-			{"role": "system", "content": f"请按以下json格式输出\n{json.dumps(json_schema, ensure_ascii=False)}"},
-			{"role": "user", "content": f"""请你根据提供的编程题目和测试样例，按照以下标准对全面性维度进行打分：
+			{"role": "system", "content": f"""你是一个代码测试以及C语言编程方面的专家。接下来你会被提供以下内容：
+	(1)problem:C语言编程题目描述；
+	(2)samples:题目对应的测试样例；
+	(3)standards:评估标准，包含测试样例质量的评估维度及其评估指标。你的任务是参考题目，根据评估标准对测试样例质量进行评估。
+	请严格按照下面给定的json格式输出：
+	{json.dumps(json_schema, ensure_ascii=False)}"""},
+			{"role": "user", "content": f"""
+	这是我提供的内容：
+	problem:
+	{problem_description}
+	samples:
+	{case_json}
+	standards:
+	请你根据提供的编程题目和测试样例，按照以下标准对全面性维度进行打分：
 	全面性(comprehensive)：测试样例能否覆盖题目的典型情况、边界情况和特殊情况。
 	1分：样例覆盖率极低，缺少基本情况，完全不考虑边界条件。
 	2分：样例覆盖了一部分常见输入，但未考虑边界情况或特殊情况。
 	3分：样例覆盖了大部分常见输入，部分边界和特殊情况。
 	4分：样例较全面，涵盖典型情况、常见边界条件，特殊情况覆盖少量缺失。
 	5分：样例非常全面，涵盖了所有典型、边界和特殊情况，无明显遗漏。
-	以下是编程题目：
-	{problem_description}
-	以下是测试样例：
-	{case_json}
-	在对上述测试样例进行评估时，请务必保持打分标准的一致性。
 	"""}],
 		"response_format": {"type": "json_object"}
 	}
@@ -142,8 +161,20 @@ def splicing_code_gen_eval_prompt(problem_description, code):
 	prompt = {
 		"model": eval_model,
 		"messages": [
-			{"role": "system", "content": f"请按以下json格式输出\n{json.dumps(json_schema, ensure_ascii=False)}"},
+			{"role": "system", "content": f"""你是一个代码审核以及C语言编程方面的专家。接下来你会被提供以下内容：
+	(1)problem:C语言编程题目描述;
+	(2)code:题目对应的C代码；
+	(3)standards:评估标准，包含代码质量的评估维度及其评估指标。
+	你的任务是参考题目，根据评估标准对代码质量进行评估。
+	请严格按照下面给定的json格式输出：
+	{json.dumps(json_schema, ensure_ascii=False)}"""},
 			{"role": "user", "content": f"""
+	这是我提供的内容：
+	problem:
+	{problem_description}
+	code:
+	{code}
+	standards:
 	请你根据提供的编程题目和代码，按照以下标准对每个维度进行打分：
 	一、可读性(readability)：
 	1分：代码完全缺乏可读性，变量名和函数名无语义，且没有注释或结构化设计。
@@ -157,11 +188,6 @@ def splicing_code_gen_eval_prompt(problem_description, code):
 	3分：时间和空间效率一般，运行时间接近题目限制，内存使用明显高于最优解但未超限。
 	4分：时间和空间效率较高，运行时间稍高于最优解，但在合理范围内，内存使用接近题目限制。
 	5分：时间和空间效率均非常高，运行时间接近最优解，内存使用远低于题目限制。
-	以下是编程题目：
-	{problem_description}
-	以下是代码：
-	{code}
-	在对上述代码进行评估时，请务必保持打分标准的一致性。
 	"""}],
 		"response_format": {"type": "json_object"}
 	}
@@ -174,20 +200,26 @@ def splicing_code_cor_eval_prompt(problem_description, code):
 	prompt = {
 		"model": eval_model,
 		"messages": [
-			{"role": "system", "content": f"请按以下json格式输出\n{json.dumps(json_schema, ensure_ascii=False)}"},
+			{"role": "system", "content": f"""你是一个代码审核以及C语言编程方面的专家。接下来你会被提供以下内容：
+	(1)problem:C语言编程题目描述;
+	(2)code:题目对应的纠错后的C代码；
+	(3)standards:评估标准，包含纠错代码质量的评估维度及其评估指标。你的任务是参考题目，根据评估标准对纠错后代码质量进行评估。
+	请严格按照下面给定的json格式输出：
+	{json.dumps(json_schema, ensure_ascii=False)}"""},
 			{"role": "user", "content": f"""
-	请你根据提供的编程题目和代码，按照以下标准对易懂性维度进行打分：
-	易懂性：评估AI纠错建议的清晰度和易理解程度。
-	1 分：全用晦涩术语，无学生知识相关解释、示例，像天书，难寻与所学编程知识关联。
-	2 分：含少量专业词汇，表述生硬、简略不连贯，有简单示例但关联不明，逻辑缺推导。
-	3 分：多用专业词汇，有解释、简单示例围绕错误，深度不够，未拓展知识，较碎片化。
-	4 分：专业词汇恰当，示例丰富阐释错误、修复方法与知识拓展，逻辑连贯，答疑解惑。
-	5 分：表述极清晰，用刚学专业词汇，幽默形象阐释，示例多且能拓展知识体系，激发探索欲。
-	以下是编程题目：
+	这是我提供的内容：
+	problem:
 	{problem_description}
-	以下是代码：
+	code:
 	{code}
-	在对上述代码进行评估时，请务必保持打分标准的一致性。
+	standards:
+	请你根据提供的编程题目和代码，按照以下标准对易懂性维度进行打分：
+	可理解性(understandability)：
+	1 分：代码完全不可读，无任何注释或说明，关键逻辑缺失解释，未指出原始错误位置或原因，仅机械性修正代码。
+	2 分：代码难以理解，仅有少量注释，仅解释简单操作，未覆盖关键算法，粗略提及错误位置，但无具体原因分析。
+	3 分：代码基本可读，注释覆盖主要逻辑，但对复杂算法或边界条件解释不足，明确标注错误位置，并简要说明错误类型。
+	4 分：代码高度清晰，注释详细解释核心算法、异常处理及关键参数设计，能结合上下文详细分析错误原因，说明修正策略。
+	5 分：代码完美可读，注释精准覆盖全部复杂逻辑，包括性能优化与潜在风险说明，精准定位错误根源，提供错误归因与预防建议表 。
 	"""}],
 		"response_format": {"type": "json_object"}
 	}
