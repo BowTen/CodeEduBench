@@ -39,6 +39,7 @@ def run_evaluate_by_prompt(prompt):
 		return 0
 	
 	params = json.loads(prompt.prompt_json)
+	#print(params['response_format'])
 
 
 	#response = client.chat.completions.create(**params)
